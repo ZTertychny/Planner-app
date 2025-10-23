@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  planner:
+    build:
+      context: services/planner-service
+    environment:
+      BOT_HOST: telegram-bot
+      NOTIFICATION_PORT: 8088
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-app}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-app}
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+      - telegram-bot
+  telegram-bot:
+    build:
+      context: services/bot-service
+    environment:
+      SERVICE_HOST: planner
+    ports:
+      - 8088:8088
+    depends_on:
+      - db
+volumes:
+  pgdata: { }

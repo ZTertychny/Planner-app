@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: app
+    password: app
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  task:
+    scheduling:
+      enabled: true
+
+planner:
+  notify:
+    lead-minutes: 30
+
+bot:
+  service:
+    notification:
+      url: 'http://${BOT_HOST:localhost}:${NOTIFICATION_PORT:8088}'
+
+
+dadata:
+  clean:
+    url: 'https://cleaner.dadata.ru/api/v1/clean/address'
+  client:
+    token: '123456789' # указать свой токен
+    secret: '123456789' # указать свой ключ
+twogis:
+  api-key: '123456789' # указать свой ключ
+  url: 'https://routing.api.2gis.com/routing/7.0.0/global'
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.scheduling: DEBUG
+    org.springframework.scheduling.concurrent: DEBUG
