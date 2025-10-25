@@ -1,14 +1,9 @@
 server:
   port: 8088
 
-dadata:
-  client:
-    token: 'ed6587604820051170229036d9646b76c831adc2' # заменить на свой токен
-
 telegram:
-  botToken: '8268221066:AAFCQQdVT5txVa4HnHOUbzeLw_VeZg7BOCg' # токен бота
-  botUserName: PlannerRouteBot
-
+  botToken: ${TELEGRAM_BOT_TOKEN:token} # токен бота
+  botUserName: ${TELEGRAM_BOT_USER_NAME:botUserName}
 
 planner:
   feign:
@@ -27,5 +22,3 @@ logging:
   level:
     feign: DEBUG
     org.springframework.cloud.openfeign: DEBUG
-
-

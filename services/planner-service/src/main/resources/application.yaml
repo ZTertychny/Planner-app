@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: app
-    password: app
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:admin}
   jpa:
     hibernate:
       ddl-auto: none
@@ -30,10 +30,10 @@ dadata:
   clean:
     url: 'https://cleaner.dadata.ru/api/v1/clean/address'
   client:
-    token: '123456789' # указать свой токен
-    secret: '123456789' # указать свой ключ
+    token: ${DADATA_TOKEN:token} # указать свой токен
+    secret: ${DADATA_SECRET:secret} # указать свой ключ
 twogis:
-  api-key: '123456789' # указать свой ключ
+  api-key: ${TWOGIS_API_KEY:apiKey} # указать свой ключ
   url: 'https://routing.api.2gis.com/routing/7.0.0/global'
 logging:
   level:

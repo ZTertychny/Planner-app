@@ -18,3 +18,5 @@ dependencies {
 
     testImplementation(libs.spring.boot.starter.test)
 }
+
+tasks.named("jar") { enabled = false }   // выключаем plain JAR

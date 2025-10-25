@@ -2,21 +2,26 @@ services:
   db:
     image: postgres:17
     environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
   planner:
     build:
-      context: services/planner-service
+      context: .
+      dockerfile: services/planner-service/Dockerfile
+    image: ${DOCKER_USER}/planner-service:${APP_VERSION}
     environment:
-      BOT_HOST: telegram-bot
-      NOTIFICATION_PORT: 8088
+      BOT_HOST: ${BOT_HOST}
+      NOTIFICATION_PORT: ${NOTIFICATION_PORT}
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-app}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-app}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      DADATA_TOKEN: ${DADATA_TOKEN}
+      DADATA_SECRET: ${DADATA_SECRET}
+      TWOGIS_API_KEY: ${TWOGIS_API_KEY}
     ports:
       - 8080:8080
     depends_on:
@@ -24,9 +29,14 @@ services:
       - telegram-bot
   telegram-bot:
     build:
-      context: services/bot-service
+      context: .
+      dockerfile: services/bot-service/Dockerfile
+    image: ${DOCKER_USER}/bot-service:${APP_VERSION}
     environment:
-      SERVICE_HOST: planner
+      SERVICE_HOST: ${SERVICE_HOST}
+      SERVICE_PORT: ${SERVICE_PORT}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_USER_NAME: ${TELEGRAM_BOT_USER_NAME}
     ports:
       - 8088:8088
     depends_on:
