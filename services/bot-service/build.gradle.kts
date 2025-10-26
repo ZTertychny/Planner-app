@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.spring.cloud.starter.openfeign)
     implementation("org.telegram:telegrambots:$telegram")
     implementation(project(":libs:contracts"))
-//
     testImplementation(libs.spring.boot.starter.test)
 }
+
+tasks.named("jar") { enabled = false }   // выключаем plain JAR
