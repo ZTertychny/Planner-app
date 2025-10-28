@@ -7,6 +7,7 @@ junit = "5.10.2"
 postgres = "42.7.4"
 lombok = "9.0.0"
 flyway = "11.14.1"
+logback = "8.0"
 
 
 [libraries]
@@ -19,6 +20,7 @@ postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-database-postgres = { module = "org.flywaydb:flyway-database-postgresql" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logback" }
 [bundles]
 spring-web = [
     "spring-boot-starter-web",

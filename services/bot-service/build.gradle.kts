@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.spring.cloud.starter.openfeign)
     implementation("org.telegram:telegrambots:$telegram")
     implementation(project(":libs:contracts"))
+    implementation(libs.logstash.logback.encoder)
     testImplementation(libs.spring.boot.starter.test)
 }
 

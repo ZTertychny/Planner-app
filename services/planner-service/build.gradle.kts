@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.flyway.core)
     implementation(libs.flyway.database.postgres)
     implementation(project(":libs:contracts"))
+    implementation(libs.logstash.logback.encoder)
     runtimeOnly(libs.postgres)
 
     testImplementation(libs.spring.boot.starter.test)
