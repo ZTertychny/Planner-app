@@ -1,0 +1,109 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build_and_push_images:
+    name: Build & push images via compose
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      APP_VERSION: latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Мини .env, чтобы собрать образ
+      - name: Create CI .env for compose build
+        run: |
+          cat > .env <<EOF
+          DOCKER_USER=${DOCKER_USER}
+          APP_VERSION=${APP_VERSION}
+          EOF
+
+      - name: docker compose build (all)
+        run: docker compose -f docker-compose.yaml build --pull
+
+      - name: docker compose push (all)
+        run: docker compose -f docker-compose.yaml push
+
+  push_compose:
+    name: Copy docker-compose.yaml to server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "docker-compose.yaml"
+          target: "/home/zahar/app"
+
+  deploy:
+    name: Deploy on server
+    runs-on: ubuntu-latest
+    needs: [ build_and_push_images, push_compose ]
+    steps:
+      - name: SSH deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Упадем, если что-то пойдет не так. Увидим это 
+            set -euo pipefail
+            cd /home/zahar/app
+
+            # Собираем .env и проставляем на env права на чтение и запись только для владельца
+            umask 177
+            cat > .env << 'EOF'
+            DOCKER_USER=${{ secrets.DOCKER_USER }}
+            APP_VERSION=latest
+
+            # --- Postgres ---
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+
+            # --- planner-service ---
+            BOT_HOST=telegram-bot
+            NOTIFICATION_PORT=8088
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DADATA_TOKEN=${{ secrets.DADATA_TOKEN }}
+            DADATA_SECRET=${{ secrets.DADATA_SECRET }}
+            TWOGIS_API_KEY=${{ secrets.TWOGIS_API_KEY }}
+            LOGSTASH_HOST=${{ secrets.LOGSTASH_HOST }}
+            LOGSTASH_PORT=${{ secrets.LOGSTASH_PORT }}
+
+            # --- bot-service ---
+            SERVICE_HOST=planner
+            SERVICE_PORT=8080
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_BOT_USER_NAME=${{ secrets.TELEGRAM_BOT_USER_NAME }}
+            LOGSTASH_HOST=${{ secrets.LOGSTASH_HOST }}
+            LOGSTASH_PORT=${{ secrets.LOGSTASH_PORT }}
+            EOF
+
+            sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+            sudo docker compose pull
+            sudo docker compose up -d --no-build --remove-orphans

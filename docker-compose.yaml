@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: services/planner-service/Dockerfile
-    image: ${DOCKER_USER}/planner-service:${APP_VERSION}
+    image: ${DOCKERHUB_USERNAME}/planner-service:${APP_VERSION}
     environment:
       BOT_HOST: ${BOT_HOST}
       NOTIFICATION_PORT: ${NOTIFICATION_PORT}
@@ -33,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: services/bot-service/Dockerfile
-    image: ${DOCKER_USER}/bot-service:${APP_VERSION}
+    image: ${DOCKERHUB_USERNAME}/bot-service:${APP_VERSION}
     environment:
       SERVICE_HOST: ${SERVICE_HOST}
       SERVICE_PORT: ${SERVICE_PORT}
