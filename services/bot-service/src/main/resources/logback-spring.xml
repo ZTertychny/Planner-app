@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<springProperty scope="context" name="ENV" source="environment" defaultValue="dev"/>
+<property name="LOGSTASH_HOST" value="${LOGSTASH_HOST:-194.87.237.197}"/>
+<property name="LOGSTASH_PORT" value="${LOGSTASH_PORT:-50000}"/>
+
+<include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder" charset="UTF-8">
+        <providers>
+            <timestamp/>
+            <logLevel/>
+            <loggerName/>
+            <threadName/>
+            <mdc/>
+            <context/>
+            <pattern>
+                <pattern>
+                    { "app":"orchestrator", "environment":"${ENV}", "message":"%message%nopex{full}" }
+                </pattern>
+            </pattern>
+            <logstashMarkers/>
+            <stackTrace/>      <!-- опционально: чтобы трейс был отдельным полем -->
+        </providers>
+    </encoder>
+</appender>
+
+<root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="logstash"/>
+</root>
+</configuration>

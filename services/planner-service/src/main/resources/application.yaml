@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  application:
+    name:
+      planner-service
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: ${DB_USERNAME:admin}
@@ -40,3 +43,6 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.scheduling: DEBUG
     org.springframework.scheduling.concurrent: DEBUG
+
+LOGSTASH_HOST: ${LOGSTASH_HOST}
+LOGSTASH_PORT: ${LOGSTASH_PORT}

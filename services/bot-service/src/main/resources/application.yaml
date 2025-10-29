@@ -1,6 +1,10 @@
 server:
   port: 8088
 
+spring:
+  application:
+    name: bot-service
+
 telegram:
   botToken: ${TELEGRAM_BOT_TOKEN:token} # токен бота
   botUserName: ${TELEGRAM_BOT_USER_NAME:botUserName}

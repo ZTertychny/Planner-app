@@ -30,6 +30,7 @@ public class TwoGisAdapter {
 
     public Optional<Duration> getDuration(Route route, LocalDate targetDate) {
         var rq = routingMapper.mapToRq(route, targetDate);
+        log.info("Got mapped rq = {} from route = {} and targetDate = {}", rq, route, targetDate);
         var uri = UriComponentsBuilder
                 .fromUriString(url)
                 .queryParam("key", apiKey)
@@ -41,7 +42,7 @@ public class TwoGisAdapter {
 
         HttpEntity<RoutingRq> req = new HttpEntity<>(rq, headers);
 
-        log.debug("2GIS POST {}", uri);
+        log.info("2GIS POST to {} with rq {}", uri, req);
         ResponseEntity<RoutingRs> resp = restTemplate.exchange(uri, HttpMethod.POST, req, RoutingRs.class);
 
         if (resp.getStatusCode().is2xxSuccessful()
