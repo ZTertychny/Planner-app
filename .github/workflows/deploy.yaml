@@ -76,7 +76,7 @@ jobs:
             # Собираем .env и проставляем на env права на чтение и запись только для владельца
             umask 177
             cat > .env << 'EOF'
-            DOCKER_USER=${{ secrets.DOCKERHUB_USERNAME }}
+            DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             APP_VERSION=latest
 
             # --- Postgres ---
