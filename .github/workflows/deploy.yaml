@@ -65,8 +65,8 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             # Упадем, если что-то пойдет не так. Увидим это 
@@ -76,7 +76,7 @@ jobs:
             # Собираем .env и проставляем на env права на чтение и запись только для владельца
             umask 177
             cat > .env << 'EOF'
-            DOCKER_USER=${{ secrets.DOCKER_USER }}
+            DOCKER_USER=${{ secrets.DOCKERHUB_USERNAME }}
             APP_VERSION=latest
 
             # --- Postgres ---
