@@ -18,7 +18,7 @@
             <context/>
             <pattern>
                 <pattern>
-                    { "app":"orchestrator", "environment":"${ENV}", "message":"%message%nopex{full}" }
+                    { "app":"bot-service", "environment":"${ENV}", "message":"%message%nopex{full}" }
                 </pattern>
             </pattern>
             <logstashMarkers/>
