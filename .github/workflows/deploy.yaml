@@ -31,7 +31,7 @@ jobs:
       - name: Create CI .env for compose build
         run: |
           cat > .env <<EOF
-          DOCKER_USER=${DOCKER_USER}
+          DOCKER_USER=${DOCKERHUB_USERNAME}
           APP_VERSION=${APP_VERSION}
           EOF
 
