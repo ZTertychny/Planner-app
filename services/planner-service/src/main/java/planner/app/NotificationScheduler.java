@@ -53,6 +53,7 @@ public class NotificationScheduler {
             try {
                 bot.notify(route.getUser().getTgChatId(), buildMsg(route));
                 notification.setStatus(NotificationStatus.SENT);
+                notification.setSend(nowUtc);
                 log.info("FIRE user={} chat={}", route.getUser().getId(), route.getUser().getTgChatId());
             } catch (Exception ex) {
                 log.warn("Notify failed user={} : {}", route.getUser().getId(), ex.toString());

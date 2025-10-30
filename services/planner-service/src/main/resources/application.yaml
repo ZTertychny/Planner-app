@@ -13,8 +13,11 @@ spring:
     hibernate:
       ddl-auto: none
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.sql
   task:
     scheduling:
       enabled: true

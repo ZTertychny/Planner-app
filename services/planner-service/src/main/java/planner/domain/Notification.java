@@ -27,4 +27,6 @@ public class Notification {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private NotificationStatus status;
+    @Column(name = "send")
+    private Instant send;
 }

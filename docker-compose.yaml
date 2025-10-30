@@ -41,6 +41,9 @@ services:
       TELEGRAM_BOT_USER_NAME: ${TELEGRAM_BOT_USER_NAME}
       LOGSTASH_HOST: ${LOGSTASH_HOST}
       LOGSTASH_PORT: ${LOGSTASH_PORT}
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     ports:
       - 8088:8088
     depends_on:
