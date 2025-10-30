@@ -21,6 +21,7 @@ flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-database-postgres = { module = "org.flywaydb:flyway-database-postgresql" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logback" }
+liquibase = {module = "org.liquibase:liquibase-core"}
 [bundles]
 spring-web = [
     "spring-boot-starter-web",
