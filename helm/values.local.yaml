@@ -1,0 +1,12 @@
+secrets:
+  db:
+    pass: "app"
+    name: "app"
+  dadata:
+    token: "999f889fb7cf8dbdc46e3865d4129a7d3ded536b"
+    secret: "aa28fa1c28aa9d0ce26532d39cc11b8cf58adde0"
+  twogis:
+    key: "95b92a2b-cb89-42db-8c90-132e4ffb08d8"
+  tg:
+    botToken: "8268221066:AAFCQQdVT5txVa4HnHOUbzeLw_VeZg7BOCg"
+    botName: "PlannerRouteBot"

@@ -1,0 +1,40 @@
+namespace: routebot
+app:
+  dockerhubUsername: zickurag   # имя вашего DockerHub пользователя
+  version: latest               # тег образов
+
+images:
+  core: planner-service         # имя образа core (без реестра/тэга)
+  bot: bot-service             # имя образа бота
+
+service:
+  core:
+    name: planner               # имя k8s Service для core
+    port: 8080
+  bot:
+    name: telegram-bot          # имя k8s Service для бота
+    port: 8088                  # бот слушает 8088
+
+config:
+  # JDBC внешней БД (без пароля)
+  springDatasourceUrl: "jdbc:postgresql://host.minikube.internal:5432/postgres"
+  springDatasourceUsername: "app"
+
+  # Кросс-ссылки между сервисами (внутрикластерный DNS по именам Service)
+  BOT_HOST: "telegram-bot"
+  NOTIFICATION_PORT: "8088"
+
+  SERVICE_HOST: "planner"
+  SERVICE_PORT: "8080"
+
+  # Логи
+  LOGSTASH_HOST: "194.87.237.197"
+  LOGSTASH_PORT: "50000"
+
+probes:
+  readinessPath: "/actuator/health/readiness"
+  livenessPath: "/actuator/health/liveness"
+
+resources:
+  core: { }
+  bot: { }
