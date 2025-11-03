@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service.bot.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: {{ .Values.service.bot.name }} }
+  template:
+    metadata:
+      labels: { app: {{ .Values.service.bot.name }} }
+    spec:
+      containers:
+        - name: {{ .Values.service.bot.name }}
+          image: "{{ .Values.app.dockerhubUsername }}/{{ .Values.images.bot }}:{{ .Values.app.version }}"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8088
+          envFrom:
+            - configMapRef: { name: app-config }
+            - secretRef:    { name: app-secrets }
+          readinessProbe:
+            httpGet: { path: {{ .Values.probes.readinessPath | quote }}, port: 8088 }
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet: { path: {{ .Values.probes.livenessPath | quote }}, port: 8088 }
+            initialDelaySeconds: 20

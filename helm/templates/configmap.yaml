@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: {{ .Release.Namespace }}
+data:
+  SPRING_DATASOURCE_URL: {{ .Values.config.springDatasourceUrl | quote }}
+  SPRING_DATASOURCE_USERNAME: {{ default .Values.secrets.db.name .Values.config.springDatasourceUsername | quote }}
+
+  BOT_HOST: {{ .Values.config.BOT_HOST | quote }}
+  NOTIFICATION_PORT: {{ .Values.config.NOTIFICATION_PORT | quote }}
+
+  SERVICE_HOST: {{ .Values.config.SERVICE_HOST | quote }}
+  SERVICE_PORT: {{ .Values.config.SERVICE_PORT | quote }}
+
+  LOGSTASH_HOST: {{ .Values.config.LOGSTASH_HOST | quote }}
+  LOGSTASH_PORT: {{ .Values.config.LOGSTASH_PORT | quote }}

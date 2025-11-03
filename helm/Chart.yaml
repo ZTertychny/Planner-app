@@ -1,0 +1,6 @@
+apiVersion: v2
+name: route-bot
+description: "Planner app: tgBot + planner-service + external db"
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

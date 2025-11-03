@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service.core.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: {{ .Values.service.core.name }} }
+  template:
+    metadata:
+      labels: { app: {{ .Values.service.core.name }} }
+    spec:
+      containers:
+        - name: {{ .Values.service.core.name }}
+          image: "{{ .Values.app.dockerhubUsername }}/{{ .Values.images.core }}:{{ .Values.app.version }}"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef: { name: app-config }
+            - secretRef:    { name: app-secrets }
+          readinessProbe:
+            httpGet: { path: {{ .Values.probes.readinessPath | quote }}, port: 8080 }
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet: { path: {{ .Values.probes.livenessPath | quote }}, port: 8080 }
+            initialDelaySeconds: 20
