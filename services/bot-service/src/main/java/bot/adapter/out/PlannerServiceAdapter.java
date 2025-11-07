@@ -19,5 +19,6 @@ public interface PlannerServiceAdapter {
     Optional<FormalizedAddress> formalizeGeoData(@RequestBody GeoDataDto data);
 
     @PostMapping("/settings")
+    @Deprecated
     String saveSettings(@RequestBody PlannerSettings plannerSettings);
 }

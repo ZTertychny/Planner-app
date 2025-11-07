@@ -6,13 +6,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import planner.adapter.out.bot.TelegramBotAdapter;
+import planner.adapter.out.kafka.Notifier;
 import planner.adapter.persistence.NotificationRepo;
 import planner.adapter.persistence.RouteRepo;
 import planner.domain.Notification;
 import planner.domain.NotificationStatus;
 import planner.domain.Route;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Component
 @Slf4j
@@ -21,7 +25,8 @@ public class NotificationScheduler {
     private final RouteRepo routeRepo;
     private final NotificationRepo notifications;
     private final ComputingNotificationService compute;
-    private final TelegramBotAdapter bot;
+//    private final TelegramBotAdapter bot;
+    private final Notifier notifier;
 
     private static final long CUTOFF_MIN_BEFORE_ARRIVAL = 5;
 
@@ -51,7 +56,7 @@ public class NotificationScheduler {
 
             // пора стрелять
             try {
-                bot.notify(route.getUser().getTgChatId(), buildMsg(route));
+                notifier.notify(route.getUser().getTgChatId(), buildMsg(route));
                 notification.setStatus(NotificationStatus.SENT);
                 notification.setSend(nowUtc);
                 log.info("FIRE user={} chat={}", route.getUser().getId(), route.getUser().getTgChatId());

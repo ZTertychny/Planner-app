@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class TelegramBotAdapter {
     private final RestTemplate restTemplate;
     @Value("${bot.service.notification.url}")

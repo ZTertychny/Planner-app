@@ -13,6 +13,7 @@ dependencies {
     implementation("org.telegram:telegrambots:$telegram")
     implementation(project(":libs:contracts"))
     implementation(libs.logstash.logback.encoder)
+    implementation(libs.spring.kafka)
     testImplementation(libs.spring.boot.starter.test)
 }
 
