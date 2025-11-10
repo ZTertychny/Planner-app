@@ -11,6 +11,7 @@ import planner.app.SaveSettingsUseCase;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Deprecated
 public class SettingsController {
     private final SaveSettingsUseCase saveSettingsUseCase;
 

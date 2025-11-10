@@ -21,6 +21,25 @@ spring:
   task:
     scheduling:
       enabled: true
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS:kafka-1:9092,kafka-2:9092,kafka-3:9092}
+    producer:
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: planner-service
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    listener:
+      ack-mode: record
+      missing-topics-fatal: false
 
 planner:
   notify:
@@ -30,6 +49,12 @@ bot:
   service:
     notification:
       url: 'http://${BOT_HOST:localhost}:${NOTIFICATION_PORT:8088}'
+  kafka:
+    topic:
+      consume:
+        settings: user-settings
+      produce:
+        notify: reminder-ready
 
 
 dadata:

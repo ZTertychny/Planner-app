@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":libs:contracts"))
     implementation(libs.logstash.logback.encoder)
     implementation(libs.liquibase)
+    implementation(libs.spring.kafka)
     runtimeOnly(libs.postgres)
 
     testImplementation(libs.spring.boot.starter.test)

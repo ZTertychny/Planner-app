@@ -4,6 +4,26 @@ server:
 spring:
   application:
     name: bot-service
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS:kafka-1:9092,kafka-2:9092,kafka-3:9092}
+    producer:
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: <bot-service>
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+    listener:
+      ack-mode: record
+      missing-topics-fatal: false
 
 telegram:
   botToken: ${TELEGRAM_BOT_TOKEN:token} # токен бота
@@ -13,6 +33,13 @@ planner:
   feign:
     service:
       url: ${SERVICE_HOST:localhost}:${SERVICE_PORT:8080}
+  kafka:
+    topic:
+      produce:
+        settings: user-settings
+      consume:
+        notify: reminder-ready
+
 
 feign:
   client:

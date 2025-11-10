@@ -1,6 +1,7 @@
 package bot.adapter.in;
 
 import bot.adapter.out.PlannerServiceAdapter;
+import bot.adapter.out.UserSettingsKafkaAdapter;
 import bot.adapter.out.PlannerSettingsMapper;
 import bot.dto.Session;
 import bot.dto.State;
@@ -31,6 +32,7 @@ import static bot.util.TelegramBotPhrases.*;
 public class TelegramBotHandler extends TelegramLongPollingBot {
     private final PlannerServiceAdapter plannerServiceAdapter;
     private final PlannerSettingsMapper plannerSettingsMapper;
+    private final UserSettingsKafkaAdapter userSettingsKafkaAdapter;
 
     @Value("${telegram.botToken}")
     private String botToken;
@@ -105,7 +107,7 @@ public class TelegramBotHandler extends TelegramLongPollingBot {
         sendText(chatId, EXIT);
         var settings = plannerSettingsMapper.map(session, String.valueOf(userId), String.valueOf(chatId));
         sessions.remove(userId);
-        plannerServiceAdapter.saveSettings(settings);
+        userSettingsKafkaAdapter.sendSettings(settings);
     }
 
     @Override
