@@ -101,6 +101,10 @@ jobs:
             TELEGRAM_BOT_USER_NAME=${{ secrets.TELEGRAM_BOT_USER_NAME }}
             LOGSTASH_HOST=${{ secrets.LOGSTASH_HOST }}
             LOGSTASH_PORT=${{ secrets.LOGSTASH_PORT }}
+            
+            # --- kafka ---
+            EXTERNAL_HOST_KAFKA=${{ secrets.EXTERNAL_HOST_KAFKA }}
+            KAFKA_CLUSTER_ID=${{ secrets.KAFKA_CLUSTER_ID }}
             EOF
 
             sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
