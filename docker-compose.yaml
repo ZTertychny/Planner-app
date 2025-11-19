@@ -16,6 +16,11 @@ services:
     hostname: kafka-1
     ports:
       - "19094:9094"   # EXTERNAL порт для клиентов с хоста
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     environment:
       # KRaft / роли / идентичность
       KAFKA_NODE_ID: "1"
@@ -54,6 +59,11 @@ services:
     hostname: kafka-2
     ports:
       - "29094:9094"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     environment:
       KAFKA_NODE_ID: "2"
       KAFKA_PROCESS_ROLES: "broker,controller"
@@ -88,6 +98,11 @@ services:
     hostname: kafka-3
     ports:
       - "39094:9094"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     environment:
       KAFKA_NODE_ID: "3"
       KAFKA_PROCESS_ROLES: "broker,controller"
@@ -135,8 +150,10 @@ services:
     ports:
       - 8080:8080
     logging:
+      driver: "json-file"
       options:
         max-size: "50m"
+        max-file: "3"
     depends_on:
       - db
       - telegram-bot
@@ -159,8 +176,10 @@ services:
     ports:
       - 8088:8088
     logging:
+      driver: "json-file"
       options:
         max-size: "50m"
+        max-file: "3"
     depends_on:
       - db
       - kafka-1
