@@ -134,6 +134,9 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
     ports:
       - 8080:8080
+    logging:
+      options:
+        max-size: "50m"
     depends_on:
       - db
       - telegram-bot
@@ -155,6 +158,9 @@ services:
       - 8.8.8.8
     ports:
       - 8088:8088
+    logging:
+      options:
+        max-size: "50m"
     depends_on:
       - db
       - kafka-1
